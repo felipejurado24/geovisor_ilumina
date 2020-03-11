@@ -27,7 +27,7 @@
         <title> GEOVISOR SIGWEB</title>
     </head>
     <body>
-        <div align="center" id="map"   style="width: 250px; height: 250px;">
+        <div align="center" id="map"   style="width: 600px; height: 600px;">
         </div><br>
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
@@ -49,7 +49,7 @@
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
         var measureControl = new L.Control.Measure({
-            position: 'topleft',
+            position: 'center',
             primaryLengthUnit: 'meters',
             secondaryLengthUnit: 'kilometers',
             primaryAreaUnit: 'sqmeters',
