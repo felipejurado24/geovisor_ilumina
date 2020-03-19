@@ -6,7 +6,8 @@
         <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
-        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"/>
+		<link rel="stylesheet" href="css/L.Control.Locate.min.css">
         <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
         <link rel="stylesheet" href="css/leaflet-measure.css">
         <style>
@@ -22,9 +23,14 @@
 				background-repeat: no-repeat;
 				background-attachment:fixed;
 		}
-		
+		h1{
+				color:white;
+				text-align: center;
+				font-family:Cooper Black;
+		}
         </style>
-        <title> GEOVISOR SIGWEB</title>
+        <title> GEOVISOR ILUMINA </title>
+		<h1> BIENVENIDOS A ILUMINA </h1>
     </head>
     <body>
         <div align="center" id="mapid"   style="width: 600px; height: 600px;">
@@ -43,7 +49,7 @@
         <script src="data/ViasPrincipales_2.js"></script>
         <script src="data/Comunas_cali_3.js"></script>
         <script>
-        var map = L.map('map', {
+        var map = L.map('mapid', {
             zoomControl:true, maxZoom:28, minZoom:1
         }).fitBounds([[3.3118642244290566,-76.61733556776372],[3.51339676310195,-76.42195916773196]]);
         var hash = new L.Hash(map);
