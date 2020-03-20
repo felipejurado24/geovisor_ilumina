@@ -83,7 +83,7 @@
 			];
 		
 			for (var i = 0; i < coordenadas.length; i++) {						
-				puntos = new L.marker([coordenadas[i][1],coordenadas[i][2]])
+				var puntos = new L.marker([coordenadas[i][1],coordenadas[i][2]])
 					.bindPopup(coordenadas[i][0])
 					.addTo(map);
 			}
