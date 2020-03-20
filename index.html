@@ -85,7 +85,20 @@
 		L.marker([3.43221,-76.46723], {icon: myIcon}).bindPopup("Comuna 21.").addTo(map);
 		L.marker([3.34993,-76.53465], {icon: myIcon}).bindPopup("Comuna 22.").addTo(map);
 		
-		var parques= L.geoJson(json_parques);		
+		
+
+		function style(feature) { 
+		return { 
+		fillColor: '#BD0026', 
+		weight: 2, 
+		opacity: 1, 
+		color: 'white', 
+		dashArray: '3', 
+		fillOpacity: 0.7 
+		}; 
+		}
+		
+		var parques = L.geoJson(json_parques, { style: style });		
 		map.addLayer(parques);
 		
         var measureControl = new L.Control.Measure({
@@ -223,7 +236,7 @@
 		var manzanas_wms = L.tileLayer.wms('http://ws-idesc.cali.gov.co:8081/geoserver/wms?service=WMS&version=1.1.0', {layers:'catastro:cat_manzanas'}).addTo(map);
 		
         var baseMaps = {};
-        L.control.layers(baseMaps,{'<img src="legend/Comunas_cali_3.png" /> Comunas_cali': layer_Comunas_cali_3,'<img src="legend/manzanas_wms.png" /> manzanas': manzanas_wms,'<img src="legend/ViasPrincipales_2.png" /> ViasPrincipales': layer_ViasPrincipales_2,"Radiancia": layer_Radiancia_1,"OpenStreetMap": layer_OpenStreetMap_0,}).addTo(map);
+        L.control.layers(baseMaps,{'<img src="legend/Comunas_cali_3.png" /> Comunas_cali': layer_Comunas_cali_3,'<img src="legend/manzanas_wms.png" /> manzanas': manzanas_wms, '<img src="legend/parques_json.png" /> parques': parques,'<img src="legend/ViasPrincipales_2.png" /> ViasPrincipales': layer_ViasPrincipales_2,"Radiancia": layer_Radiancia_1,"OpenStreetMap": layer_OpenStreetMap_0,}).addTo(map);
         setBounds();
         L.ImageOverlay.include({
             getBounds: function () {
