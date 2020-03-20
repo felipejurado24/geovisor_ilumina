@@ -218,10 +218,10 @@
         bounds_group.addLayer(layer_Comunas_cali_3);
         map.addLayer(layer_Comunas_cali_3);
 		
-		var barrios_wms = L.tileLayer.wms('http://ws-idesc.cali.gov.co:8081/geoserver/wms?service=WMS&version=1.1.0', {layers:'idesc:mc_barrios'}).addTo(map);
+		var manzanas_wms = L.tileLayer.wms('http://ws-idesc.cali.gov.co:8081/geoserver/wms?service=WMS&version=1.1.0', {layers:'catastro:cat_manzanas'}).addTo(map);
 		
         var baseMaps = {};
-        L.control.layers(baseMaps,{'<img src="legend/Comunas_cali_3.png" /> Comunas_cali': layer_Comunas_cali_3,'<img src="legend/barrios_wms.png" /> barrios': barrios_wms,'<img src="legend/ViasPrincipales_2.png" /> ViasPrincipales': layer_ViasPrincipales_2,"Radiancia": layer_Radiancia_1,"OpenStreetMap": layer_OpenStreetMap_0,}).addTo(map);
+        L.control.layers(baseMaps,{'<img src="legend/Comunas_cali_3.png" /> Comunas_cali': layer_Comunas_cali_3,'<img src="legend/manzanas_wms.png" /> manzanas': manzanas_wms,'<img src="legend/ViasPrincipales_2.png" /> ViasPrincipales': layer_ViasPrincipales_2,"Radiancia": layer_Radiancia_1,"OpenStreetMap": layer_OpenStreetMap_0,}).addTo(map);
         setBounds();
         L.ImageOverlay.include({
             getBounds: function () {
