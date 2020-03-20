@@ -81,11 +81,16 @@
 			["Comuna21.",3.43221,-76.46723],
 			["Comuna22.",3.34993,-76.53465]
 			];
+			
+		var icono = L.icon({
+			iconUrl: 'legend/icono.jpg',
+			iconSize: [30, 30]			
+		});
 		
 			for (var i = 0; i < coordenadas.length; i++) {						
 				var puntos = new L.marker([coordenadas[i][1],coordenadas[i][2]])
 					.bindPopup(coordenadas[i][0])
-					.icon({iconUrl: 'legend/icono.jpg', iconSize: [22, 22]})
+					.icon(icono)
 					.addTo(map);
 			}
 		
