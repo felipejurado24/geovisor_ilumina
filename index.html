@@ -1,7 +1,10 @@
-<!doctype html>
 <?php
 header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept"); 
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+header('content-type: application/json)';
 ?>
+
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -70,6 +73,7 @@ header('Access-Control-Allow-Origin: *');
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
 		
+		// capa dibujada//
 		var coordenadas=[
 			["Comuna 1.",3.45287,-76.56706],
 			["Comuna 2.",3.47553,-76.52231],
@@ -94,7 +98,8 @@ header('Access-Control-Allow-Origin: *');
 			["Comuna 21.",3.43221,-76.46723],
 			["Comuna 22.",3.34993,-76.53465]
 			];
-			
+		
+	
 		var icono = L.icon({
 			iconUrl: 'https://img.icons8.com/plasticine/100/000000/map-pin.png',
 			iconSize: [30, 30]			
@@ -106,18 +111,57 @@ header('Access-Control-Allow-Origin: *');
 					.addTo(map);
 			}
 		
-						
+		// boton de imprimir//					
 		L.control.browserPrint({
                 printModes: [L.control.browserPrint.mode.landscape("pantalla completa")]
             }).addTo(map);
 		
-		
-		var mi_geocsv = L.geoCsv ('bankias.csv',{firstLineTitles: true, fieldSeparator: ';'});
-		map.addLayer(mi_geocsv);
-		
-		
-			
+		// csv//
+		var bankias = L.geoCsv(null, {
+			onEachFeature: function (feature, layer) {
+				var popup = '';
+				for (var clave in feature.properties) {
+					var title = bankias.getPropertyTitle(clave);
+					popup += '<b>'+title+'</b><br />'+feature.properties[clave]+'<br /><br />';
+				}
+				layer.bindPopup(popup);
+			},
+			pointToLayer: function (feature, latlng) {
+				return L.marker(latlng, {
+					icon:L.icon({
+						iconUrl: 'icono.jpg',
+						iconSize: [25,41],
+						shadowSize:   [41, 41],
+						shadowAnchor: [13, 20]
+					})
+				});
+			},
+			firstLineTitles: true
+		});
 
+		$.ajax ({
+			type:'GET',
+			dataType:'text',
+			url:'ejemplo.csv',
+		   error: function() {
+			 alert('No se pudieron cargar los datos');
+		   },
+			success: function(csv) {
+			  var cluster = new L.MarkerClusterGroup();
+				bankias.addData(csv);
+				cluster.addLayer(bankias);
+				mapa.addLayer(cluster);
+				mapa.fitBounds(cluster.getBounds());
+			},
+		   complete: function() {
+			  $('#cargando').delay(500).fadeOut('slow');
+		   }
+		});
+			
+		// capa WMS//
+		var barrios_wms = L.tileLayer.wms('http://ws-idesc.cali.gov.co:8081/geoserver/wms?service=WMS&version=1.1.0', {layers:'idesc:mc_barrios'});
+		map.addLayer(barrios_wms);	
+		// capa GeoJson//
 		function style(feature) { 
 		return { 
 		fillColor: '#2BDC2F', 
@@ -264,7 +308,7 @@ header('Access-Control-Allow-Origin: *');
         bounds_group.addLayer(layer_Comunas_cali_3);
         map.addLayer(layer_Comunas_cali_3);
 		
-		var barrios_wms = L.tileLayer.wms('http://ws-idesc.cali.gov.co:8081/geoserver/wms?service=WMS&version=1.1.0', {layers:'idesc:mc_barrios'}).addTo(map);
+		
 		
         var baseMaps = {};
         L.control.layers(baseMaps,{'<img src="legend/Comunas_cali_3.png" /> Comunas_cali': layer_Comunas_cali_3,'<img src="legend/icono.png" /> puntos': puntos,'<img src="legend/barrios_wms.png" /> barrios': barrios_wms, '<img src="legend/parques_json.png" /> parques': parques,'<img src="legend/ViasPrincipales_2.png" /> ViasPrincipales': layer_ViasPrincipales_2,"Radiancia": layer_Radiancia_1,"OpenStreetMap": layer_OpenStreetMap_0,}).addTo(map);
