@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widget xmlns   = "http://www.w3.org/ns/widgets"
+    xmlns:gap   = "http://phonegap.com/ns/1.0"
+    id          = "com.geovisor.ilumina"
+    versionCode = "1"
+    version     = "0.0.1" >
+  <name>Geovisor Ilumina</name>
+  <description>
+      Un Geovisor de Luz nocturna en la ciudad de Cali.
+  </description>
+  <author href="https://github.com/felipejurado24" email="felipejurado97@hotmail.com">
+      Luis Felipe Jurado y Esteban Solano S.
+  </author>
+  <access origin="*" />
+  </widget>
