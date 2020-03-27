@@ -113,11 +113,7 @@ header('content-type: application/json)';
 					.addTo(layer_puntos);
 			}
 		
-		// boton de imprimir//					
-		L.control.browserPrint({
-                printModes: [L.control.browserPrint.mode.landscape("pantalla completa")]
-            }).addTo(map);
-		
+				
 		// csv//
 		var bankias = L.geoCsv(null, {
 			onEachFeature: function (feature, layer) {
@@ -163,6 +159,7 @@ header('content-type: application/json)';
 		// capa WMS//
 		var barrios_wms = L.tileLayer.wms('http://ws-idesc.cali.gov.co:8081/geoserver/wms?service=WMS&version=1.1.0', {layers:'idesc:mc_barrios'});
 		map.addLayer(barrios_wms);	
+		
 		// capa GeoJson//
 		function style(feature) { 
 		return { 
@@ -174,6 +171,11 @@ header('content-type: application/json)';
 		fillOpacity: 0.7 
 		}; 
 		}
+		
+		// boton de imprimir//					
+		L.control.browserPrint({
+                printModes: [L.control.browserPrint.mode.landscape("pantalla completa")]
+            }).addTo(map);
 		
 		var parques = L.geoJson(json_parques, { style: style });		
 		map.addLayer(parques);
