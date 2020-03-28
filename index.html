@@ -12,11 +12,22 @@ header('content-type: application/json)';
         <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"/>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+		integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+		  crossorigin=""/>
+		  
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css"/>
         <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-measure@3.1.0/dist/leaflet-measure.css">
-        <style>
+        
+		<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" rel="stylesheet"/>
+		<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/perliedman-leaflet-control-geocoder/1.12.1/Control.Geocoder.css"/>
+        
+		
+		<style>
         html, body, #map {
             width: 100%;
             height: 100%;
@@ -47,6 +58,11 @@ header('content-type: application/json)';
 		<script src="js/leaflet.geocsv.js"></script>
 		<script src = "js/leaflet.browser.print.min.js" > </script >
 		<script src="cordova.js"></script>
+		<script src="dist/leaflet.geocsv-src.js"></script>
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/perliedman-leaflet-control-geocoder/1.12.1/Control.Geocoder.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster-src.js"></script>
+        
 				
 		<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.70.0/dist/L.Control.Locate.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/leaflet-rotatedmarker@0.2.0/leaflet.rotatedMarker.js"></script>
@@ -128,7 +144,7 @@ header('content-type: application/json)';
 			pointToLayer: function (feature, latlng) {
 				return L.marker(latlng, {
 					icon:L.icon({
-						iconUrl: 'icono.jpg',
+						iconUrl: 'bankia.png',
 						iconSize: [25,41],
 						shadowSize:   [41, 41],
 						shadowAnchor: [13, 20]
@@ -136,12 +152,12 @@ header('content-type: application/json)';
 				});
 			},
 			firstLineTitles: true
-		});
+		}).addTo(map);
 
 		$.ajax ({
 			type:'GET',
 			dataType:'text',
-			url:'ejemplo.csv',
+			url:'bankias.csv',
 		   error: function() {
 			 alert('No se pudieron cargar los datos');
 		   },
@@ -316,7 +332,7 @@ header('content-type: application/json)';
 		
 		
         var baseMaps = {};
-        L.control.layers(baseMaps,{'<img src="legend/Comunas_cali_3.png" /> Comunas_cali': layer_Comunas_cali_3,'<img src="legend/icono.png" /> puntos': layer_puntos,'<img src="legend/barrios_wms.png" /> barrios': barrios_wms, '<img src="legend/parques_json.png" /> parques': parques,'<img src="legend/ViasPrincipales_2.png" /> ViasPrincipales': layer_ViasPrincipales_2,"Radiancia": layer_Radiancia_1,"OpenStreetMap": layer_OpenStreetMap_0,}).addTo(map);
+        L.control.layers(baseMaps,{'<img src="legend/Comunas_cali_3.png" /> Comunas_cali': layer_Comunas_cali_3,'<img src="legend/icono.png" /> puntos': layer_puntos,'<img src="bankia.png" width="16px" /> Puntos CSV': bankias,'<img src="legend/barrios_wms.png" /> barrios': barrios_wms, '<img src="legend/parques_json.png" /> parques': parques,'<img src="legend/ViasPrincipales_2.png" /> ViasPrincipales': layer_ViasPrincipales_2,"Radiancia": layer_Radiancia_1,"OpenStreetMap": layer_OpenStreetMap_0,}).addTo(map);
         setBounds();
         L.ImageOverlay.include({
             getBounds: function () {
