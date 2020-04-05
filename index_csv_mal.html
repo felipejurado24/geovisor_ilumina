@@ -32,12 +32,20 @@ header('content-type: application/json)';
         <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
 		<script src="js/leaflet.geocsv.js"></script>
 		<script src = "js/leaflet.browser.print.min.js" > </script >
+		
 		<script src="cordova.js"></script>
+		
 		<script src="dist/leaflet.geocsv-src.js"></script>
 		
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/perliedman-leaflet-control-geocoder/1.12.1/Control.Geocoder.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster-src.js"></script>
         
+		<!-- CodeMirror -->
+		<link rel="stylesheet" href="js/codemirror/codemirror.css">
+		<script src="js/codemirror/codemirror.js"></script>
+		<script src="js/codemirror/matchbrackets.js"></script>
+		<script src="js/codemirror/mode-javascript.js"></script>
+				
 		<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.70.0/dist/L.Control.Locate.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/leaflet-rotatedmarker@0.2.0/leaflet.rotatedMarker.js"></script>
         <script src="js/leaflet.pattern.js"></script>
@@ -50,12 +58,10 @@ header('content-type: application/json)';
         <script src="data/ViasPrincipales_2.js"></script>
         <script src="data/Comunas_cali_3.js"></script>
 		<script src="js/parques.js"></script>
-        
+		
 		
 		<style>
-        html, body, #map {
-            width: 100%;
-            height: 100%;
+        html, body {
             padding: 0;
             margin: 0;
         }
@@ -65,65 +71,117 @@ header('content-type: application/json)';
 				background-repeat: no-repeat;
 				background-attachment:fixed;
 		}
+		a {
+			text-decoration: none;
+		}
 		.caja {
 			display: block;
 			float:left;
 			height: 100%;
-			width: 33%;
+			width: 35%;
 			margin: 1%;
-			padding: 1%;
+			padding: 2%;
 			border: 1px solid #ccc;
 			background-color: #fff;
 		}
-		.cajamap {
+		caja2 {
 			display: block;
 			float:right;
-			width: 70%;
-			height: 100%;
-			margin: 0%;
-			padding: 1%;
-			border: 1px solid #999999;
+			width: 50%;
+			margin: 2%;
+			padding: 2%;
+			border: 1px solid #ccc;
 			background-color: #fff;
 		}
-		h1{
-				color:white;
-				text-align: center;
-				font-family:Cooper Black;
+		#mapa {
+			height: 70%;
+		}
+		h1 {
+			color:white;
+			text-align: center;
+			font-family:Cooper Black;
+		}
+		h2 {
+			margin-bottom: 5px;
+		}
+		textarea {
+			clear: both;
+			width: 100%;
+			height: 200px;
+			font-family: monospace;
+		}
+		#cargar {
+			margin: 20px 0 0 0;
+			font-size: 1.2em;
+		}
+		.CodeMirror {
+			border: 1px solid #eee;
+			font-size: 1.2em;
+			height: 20%;
+			font-family: monospace;
 		}
         </style>
         <title> GEOVISOR ILUMINA </title>
 		<h1> BIENVENIDOS A ILUMINA </h1>
     </head>
-    <body>						
-			<div class="caja">
-				<h2>Geovisor web </h2>
+    <body>              
+		  <div class="caja">
+			<div id="controles">				
+				<h2>      Geovisor web </h2>
+				<br>
 				<p>En esta página puedes observar la concentracion de luz artificial emitida en la ciudad de Santiago de Cali </p>
-				<br>
-				<br>
-				<h3>Cargar archivo .CSV</h3>
-			<form  method="post" enctype="multipart/form-data">
-				<input type = "file" name="lista" />
-				<input type ="submit" value = "Cargar" />
-			</form>	
+				<br><br><br><br><br><br>
+				<h4>Cargar Archivo .CSV</h4>
+				<textarea id="csv">
+		3.435710;-76.508012;43
+		3.418412;-76.561207;20
+		3.438488;-76.530787;32
+		3.464264;-76.531777;37 </textarea>
+				<button id="cargar">Cargar datos</button>
 			</div>
-			
-			<div align="center" id="mapa"  style="width: 65%; height: 100%; border:0.5">
 			</div>
-				
-			
+			<div class="caja2">
+				<div id="mapa"></div>
+			</div>			
+
+		
+		
+		<textarea id="opciones">
+		L.geoCsv(null,{
+		  titles: ['lat', 'lng', 'Edad'],
+		  fieldSeparator: ';',
+		  lineSeparator: '\n',
+		  deleteDobleQuotes: true,
+		  firstLineTitles: false,
+		  onEachFeature: function (feature, layer) {
+			var popup = '';
+			for (var clave in feature.properties) {
+			  var title = geo_csv.getPropertyTitle(clave);
+			  popup += '<b>'+title+'</b><br />'+feature.properties[clave]+'<br /><br />';
+			}
+			layer.bindPopup(popup);
+		  }
+		});</textarea>
+		<script>
+		
 	
-	<?php
-	copy ($_FILES['lista']['tmp_name'],$_FILES['lista']['name']);
-	$nombre= $_FILES['lista']['name'];
-	  echo $nombre;
-	?>
-	<p><?php echo $nombre; ?></p>
-	
-        
 		
 		
-		
-		<script>	
+		//codemirror
+		var opciones_editor = CodeMirror.fromTextArea(document.getElementById("opciones"), {
+		  lineNumbers: true,
+		  matchBrackets: true,
+		  mode: "text/typescript"});
+
+		var csv_editor = CodeMirror.fromTextArea(document.getElementById("csv"), {lineNumbers: true});
+
+		//altura del mapa al tamaño de los controles, dos columnas iguales
+		function ajusta_Altura() {
+		  var altura = document.getElementById('controles').offsetHeight
+		  document.getElementById('mapa').style.height = altura+300+"px";
+		}
+
+		ajusta_Altura();
 		
         var map = L.map('mapa', {
             zoomControl:true, maxZoom:28, minZoom:1
@@ -174,48 +232,24 @@ header('content-type: application/json)';
 					.addTo(layer_puntos);
 			}
 		
-				
-		// csv//
-		var bankias = L.geoCsv(null, {
-			onEachFeature: function (feature, layer) {
-				var popup = '';
-				for (var clave in feature.properties) {
-					var title = bankias.getPropertyTitle(clave);
-					popup += '<b>'+title+'</b><br />'+feature.properties[clave]+'<br /><br />';
-				}
-				layer.bindPopup(popup);
-			},
-			pointToLayer: function (feature, latlng) {
-				return L.marker(latlng, {
-					icon:L.icon({
-						iconUrl: 'bankia.png',
-						iconSize: [25,41],
-						shadowSize:   [41, 41],
-						shadowAnchor: [13, 20]
-					})
-				});
-			},
-			firstLineTitles: true
-		}).addTo(map);
+		
+		//dotamos de funcionalidad al botón cargar
+		var geo_csv = {};
 
-		$.ajax ({
-			type:'GET',
-			dataType:'text',
-			url: "bankia.csv",
-		   error: function() {
-			 alert('No se pudieron cargar los datos');
-		   },
-			success: function(csv) {
-			  var cluster = new L.MarkerClusterGroup();
-				bankias.addData(csv);
-				cluster.addLayer(bankias);
-				mapa.addLayer(cluster);
-				mapa.fitBounds(cluster.getBounds());
-			},
-		   complete: function() {
-			  $('#cargando').delay(500).fadeOut('slow');
-		   }
-		});
+		function cargar() {
+		  //guardamos los cambios del usuario en sus respectivos textarea
+		  opciones_editor.save();
+		  csv_editor.save();
+		  //borramos la capa geo_csv del mapa
+		  map.removeLayer(geo_csv);
+		  //recreamos la capa con las nuevas opciones
+		  geo_csv = eval(document.getElementById('opciones').value);
+		  geo_csv.addData(document.getElementById('csv').value);
+		  map.addLayer(geo_csv);
+		}
+		document.getElementById('cargar').addEventListener('click', cargar, false);
+
+		
 			
 		// capa WMS//
 		var barrios_wms = L.tileLayer.wms('http://ws-idesc.cali.gov.co:8081/geoserver/wms?service=WMS&version=1.1.0', {layers:'idesc:mc_barrios'});
@@ -376,7 +410,7 @@ header('content-type: application/json)';
 		
 		
         var baseMaps = {};
-        L.control.layers(baseMaps,{'<img src="legend/Comunas_cali_3.png" /> Comunas_cali': layer_Comunas_cali_3,'<img src="legend/icono.png" /> puntos': layer_puntos,'<img src="bankia.png" width="16px" /> Puntos CSV': bankias,'<img src="legend/barrios_wms.png" /> barrios': barrios_wms, '<img src="legend/parques_json.png" /> parques': parques,'<img src="legend/ViasPrincipales_2.png" /> ViasPrincipales': layer_ViasPrincipales_2,"Radiancia": layer_Radiancia_1,"OpenStreetMap": layer_OpenStreetMap_0,}).addTo(map);
+        L.control.layers(baseMaps,{'<img src="legend/Comunas_cali_3.png" /> Comunas_cali': layer_Comunas_cali_3,'<img src="legend/icono.png" /> puntos': layer_puntos,'<img src="legend/barrios_wms.png" /> barrios': barrios_wms, '<img src="legend/parques_json.png" /> parques': parques,'<img src="legend/ViasPrincipales_2.png" /> ViasPrincipales': layer_ViasPrincipales_2,"Radiancia": layer_Radiancia_1,"OpenStreetMap": layer_OpenStreetMap_0,}).addTo(map);
         setBounds();
         L.ImageOverlay.include({
             getBounds: function () {
